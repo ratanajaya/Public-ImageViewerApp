@@ -47,6 +47,13 @@
             this.pctCover = new System.Windows.Forms.PictureBox();
             this.btnPrev = new System.Windows.Forms.Button();
             this.groupAlbum = new System.Windows.Forms.GroupBox();
+            this.btnPostMetadata = new System.Windows.Forms.Button();
+            this.btnTierPlus = new System.Windows.Forms.Button();
+            this.btnTierMin = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.txtFileUpload = new System.Windows.Forms.TextBox();
+            this.btnPost = new System.Windows.Forms.Button();
+            this.btnPopupTags = new System.Windows.Forms.Button();
             this.btnExplore = new System.Windows.Forms.Button();
             this.rbOri = new System.Windows.Forms.Panel();
             this.rbOriPortrait = new System.Windows.Forms.RadioButton();
@@ -68,6 +75,7 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtFlags = new System.Windows.Forms.TextBox();
+            this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
             ((System.ComponentModel.ISupportInitialize)(this.pctCover)).BeginInit();
             this.groupAlbum.SuspendLayout();
             this.rbOri.SuspendLayout();
@@ -78,7 +86,8 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 33);
+            this.label1.Location = new System.Drawing.Point(16, 35);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(36, 18);
             this.label1.TabIndex = 0;
@@ -87,7 +96,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 63);
+            this.label2.Location = new System.Drawing.Point(16, 70);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 18);
             this.label2.TabIndex = 1;
@@ -96,7 +106,8 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 180);
+            this.label3.Location = new System.Drawing.Point(16, 205);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 18);
             this.label3.TabIndex = 2;
@@ -105,7 +116,8 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 303);
+            this.label4.Location = new System.Drawing.Point(16, 347);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 18);
             this.label4.TabIndex = 3;
@@ -114,7 +126,8 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 93);
+            this.label6.Location = new System.Drawing.Point(16, 104);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(63, 18);
             this.label6.TabIndex = 5;
@@ -123,7 +136,8 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 123);
+            this.label7.Location = new System.Drawing.Point(16, 139);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 18);
             this.label7.TabIndex = 6;
@@ -132,7 +146,8 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(17, 153);
+            this.label8.Location = new System.Drawing.Point(16, 174);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(39, 18);
             this.label8.TabIndex = 7;
@@ -140,63 +155,73 @@
             // 
             // txtTitle
             // 
-            this.txtTitle.Location = new System.Drawing.Point(135, 30);
+            this.txtTitle.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtTitle.Location = new System.Drawing.Point(133, 35);
+            this.txtTitle.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(429, 26);
+            this.txtTitle.Size = new System.Drawing.Size(243, 26);
             this.txtTitle.TabIndex = 9;
             // 
             // txtArtists
             // 
-            this.txtArtists.Location = new System.Drawing.Point(135, 60);
+            this.txtArtists.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtArtists.Location = new System.Drawing.Point(133, 69);
+            this.txtArtists.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtArtists.Name = "txtArtists";
-            this.txtArtists.Size = new System.Drawing.Size(429, 26);
+            this.txtArtists.Size = new System.Drawing.Size(243, 26);
             this.txtArtists.TabIndex = 10;
             // 
             // btnCreate
             // 
-            this.btnCreate.Font = new System.Drawing.Font("Calibri", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreate.Location = new System.Drawing.Point(135, 482);
+            this.btnCreate.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnCreate.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnCreate.Location = new System.Drawing.Point(81, 533);
+            this.btnCreate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(429, 60);
+            this.btnCreate.Size = new System.Drawing.Size(71, 52);
             this.btnCreate.TabIndex = 17;
-            this.btnCreate.Text = "GENERATE";
-            this.btnCreate.UseVisualStyleBackColor = true;
+            this.btnCreate.Text = "SAVE";
+            this.btnCreate.UseVisualStyleBackColor = false;
             this.btnCreate.Click += new System.EventHandler(this.BtnCreate_Click);
             // 
             // chkLanEnglish
             // 
             this.chkLanEnglish.AutoSize = true;
-            this.chkLanEnglish.Location = new System.Drawing.Point(135, 302);
+            this.chkLanEnglish.Location = new System.Drawing.Point(129, 345);
+            this.chkLanEnglish.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkLanEnglish.Name = "chkLanEnglish";
-            this.chkLanEnglish.Size = new System.Drawing.Size(71, 22);
+            this.chkLanEnglish.Size = new System.Drawing.Size(44, 22);
             this.chkLanEnglish.TabIndex = 18;
-            this.chkLanEnglish.Text = "English";
+            this.chkLanEnglish.Text = "EN";
             this.chkLanEnglish.UseVisualStyleBackColor = true;
             // 
             // chkLanJapanese
             // 
             this.chkLanJapanese.AutoSize = true;
-            this.chkLanJapanese.Location = new System.Drawing.Point(235, 302);
+            this.chkLanJapanese.Location = new System.Drawing.Point(189, 345);
+            this.chkLanJapanese.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkLanJapanese.Name = "chkLanJapanese";
-            this.chkLanJapanese.Size = new System.Drawing.Size(84, 22);
+            this.chkLanJapanese.Size = new System.Drawing.Size(40, 22);
             this.chkLanJapanese.TabIndex = 19;
-            this.chkLanJapanese.Text = "Japanese";
+            this.chkLanJapanese.Text = "JP";
             this.chkLanJapanese.UseVisualStyleBackColor = true;
             // 
             // chkLanChinese
             // 
             this.chkLanChinese.AutoSize = true;
-            this.chkLanChinese.Location = new System.Drawing.Point(335, 302);
+            this.chkLanChinese.Location = new System.Drawing.Point(249, 345);
+            this.chkLanChinese.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkLanChinese.Name = "chkLanChinese";
-            this.chkLanChinese.Size = new System.Drawing.Size(77, 22);
+            this.chkLanChinese.Size = new System.Drawing.Size(44, 22);
             this.chkLanChinese.TabIndex = 21;
-            this.chkLanChinese.Text = "Chinese";
+            this.chkLanChinese.Text = "CH";
             this.chkLanChinese.UseVisualStyleBackColor = true;
             // 
             // chkLanOther
             // 
             this.chkLanOther.AutoSize = true;
-            this.chkLanOther.Location = new System.Drawing.Point(435, 302);
+            this.chkLanOther.Location = new System.Drawing.Point(309, 345);
+            this.chkLanOther.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkLanOther.Name = "chkLanOther";
             this.chkLanOther.Size = new System.Drawing.Size(63, 22);
             this.chkLanOther.TabIndex = 22;
@@ -206,7 +231,8 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(17, 363);
+            this.label11.Location = new System.Drawing.Point(16, 416);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(52, 18);
             this.label11.TabIndex = 24;
@@ -215,7 +241,8 @@
             // chkIsReadTrue
             // 
             this.chkIsReadTrue.AutoSize = true;
-            this.chkIsReadTrue.Location = new System.Drawing.Point(135, 362);
+            this.chkIsReadTrue.Location = new System.Drawing.Point(129, 415);
+            this.chkIsReadTrue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkIsReadTrue.Name = "chkIsReadTrue";
             this.chkIsReadTrue.Size = new System.Drawing.Size(54, 22);
             this.chkIsReadTrue.TabIndex = 26;
@@ -226,25 +253,36 @@
             // 
             this.pctCover.ImageLocation = "";
             this.pctCover.Location = new System.Drawing.Point(0, 0);
+            this.pctCover.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pctCover.Name = "pctCover";
-            this.pctCover.Size = new System.Drawing.Size(765, 765);
+            this.pctCover.Size = new System.Drawing.Size(620, 900);
             this.pctCover.TabIndex = 53;
             this.pctCover.TabStop = false;
             this.pctCover.MouseHover += new System.EventHandler(this.PctCover_Hover);
             // 
             // btnPrev
             // 
-            this.btnPrev.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrev.Location = new System.Drawing.Point(135, 416);
+            this.btnPrev.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnPrev.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnPrev.Location = new System.Drawing.Point(81, 458);
+            this.btnPrev.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(130, 60);
+            this.btnPrev.Size = new System.Drawing.Size(71, 69);
             this.btnPrev.TabIndex = 54;
-            this.btnPrev.Text = "PREV FOLDER";
-            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Text = "PREV";
+            this.btnPrev.UseVisualStyleBackColor = false;
             this.btnPrev.Click += new System.EventHandler(this.BtnPrev_Click);
             // 
             // groupAlbum
             // 
+            this.groupAlbum.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.groupAlbum.Controls.Add(this.btnPostMetadata);
+            this.groupAlbum.Controls.Add(this.btnTierPlus);
+            this.groupAlbum.Controls.Add(this.btnTierMin);
+            this.groupAlbum.Controls.Add(this.btnDelete);
+            this.groupAlbum.Controls.Add(this.txtFileUpload);
+            this.groupAlbum.Controls.Add(this.btnPost);
+            this.groupAlbum.Controls.Add(this.btnPopupTags);
             this.groupAlbum.Controls.Add(this.btnExplore);
             this.groupAlbum.Controls.Add(this.rbOri);
             this.groupAlbum.Controls.Add(this.rbCat);
@@ -275,53 +313,146 @@
             this.groupAlbum.Controls.Add(this.label3);
             this.groupAlbum.Controls.Add(this.label2);
             this.groupAlbum.Controls.Add(this.label1);
-            this.groupAlbum.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupAlbum.Location = new System.Drawing.Point(12, 12);
+            this.groupAlbum.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.groupAlbum.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.groupAlbum.Location = new System.Drawing.Point(3, 0);
+            this.groupAlbum.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupAlbum.Name = "groupAlbum";
-            this.groupAlbum.Size = new System.Drawing.Size(1370, 812);
+            this.groupAlbum.Padding = new System.Windows.Forms.Padding(0);
+            this.groupAlbum.Size = new System.Drawing.Size(1012, 947);
             this.groupAlbum.TabIndex = 0;
             this.groupAlbum.TabStop = false;
             // 
+            // btnPostMetadata
+            // 
+            this.btnPostMetadata.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnPostMetadata.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnPostMetadata.Location = new System.Drawing.Point(160, 533);
+            this.btnPostMetadata.Name = "btnPostMetadata";
+            this.btnPostMetadata.Size = new System.Drawing.Size(137, 52);
+            this.btnPostMetadata.TabIndex = 84;
+            this.btnPostMetadata.Text = "POST METADATA";
+            this.btnPostMetadata.UseVisualStyleBackColor = false;
+            this.btnPostMetadata.Click += new System.EventHandler(this.btnPostMetadata_Click);
+            // 
+            // btnTierPlus
+            // 
+            this.btnTierPlus.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnTierPlus.Location = new System.Drawing.Point(255, 138);
+            this.btnTierPlus.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnTierPlus.Name = "btnTierPlus";
+            this.btnTierPlus.Size = new System.Drawing.Size(30, 30);
+            this.btnTierPlus.TabIndex = 82;
+            this.btnTierPlus.Text = "+";
+            this.btnTierPlus.UseVisualStyleBackColor = false;
+            this.btnTierPlus.Click += new System.EventHandler(this.btnTierPlus_Click);
+            // 
+            // btnTierMin
+            // 
+            this.btnTierMin.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnTierMin.Location = new System.Drawing.Point(218, 138);
+            this.btnTierMin.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnTierMin.Name = "btnTierMin";
+            this.btnTierMin.Size = new System.Drawing.Size(30, 30);
+            this.btnTierMin.TabIndex = 81;
+            this.btnTierMin.Text = "-";
+            this.btnTierMin.UseVisualStyleBackColor = false;
+            this.btnTierMin.Click += new System.EventHandler(this.btnTierMin_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDelete.Location = new System.Drawing.Point(23, 458);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(50, 128);
+            this.btnDelete.TabIndex = 80;
+            this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // txtFileUpload
+            // 
+            this.txtFileUpload.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtFileUpload.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtFileUpload.Location = new System.Drawing.Point(23, 606);
+            this.txtFileUpload.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtFileUpload.Multiline = true;
+            this.txtFileUpload.Name = "txtFileUpload";
+            this.txtFileUpload.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtFileUpload.Size = new System.Drawing.Size(353, 229);
+            this.txtFileUpload.TabIndex = 79;
+            // 
+            // btnPost
+            // 
+            this.btnPost.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnPost.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnPost.Location = new System.Drawing.Point(305, 533);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnPost.Name = "btnPost";
+            this.btnPost.Size = new System.Drawing.Size(71, 52);
+            this.btnPost.TabIndex = 78;
+            this.btnPost.Text = "POST";
+            this.btnPost.UseVisualStyleBackColor = false;
+            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
+            // 
+            // btnPopupTags
+            // 
+            this.btnPopupTags.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnPopupTags.Location = new System.Drawing.Point(133, 277);
+            this.btnPopupTags.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnPopupTags.Name = "btnPopupTags";
+            this.btnPopupTags.Size = new System.Drawing.Size(139, 30);
+            this.btnPopupTags.TabIndex = 77;
+            this.btnPopupTags.Text = "Tags";
+            this.btnPopupTags.UseVisualStyleBackColor = false;
+            this.btnPopupTags.Click += new System.EventHandler(this.btnPopupTags_Click);
+            // 
             // btnExplore
             // 
-            this.btnExplore.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExplore.Location = new System.Drawing.Point(274, 416);
+            this.btnExplore.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnExplore.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnExplore.Location = new System.Drawing.Point(160, 458);
+            this.btnExplore.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnExplore.Name = "btnExplore";
-            this.btnExplore.Size = new System.Drawing.Size(150, 20);
+            this.btnExplore.Size = new System.Drawing.Size(137, 32);
             this.btnExplore.TabIndex = 76;
-            this.btnExplore.Text = "Explore Album";
-            this.btnExplore.UseVisualStyleBackColor = true;
+            this.btnExplore.Text = "EXPLORE";
+            this.btnExplore.UseVisualStyleBackColor = false;
             this.btnExplore.Click += new System.EventHandler(this.btnExplore_Click);
             // 
             // rbOri
             // 
             this.rbOri.Controls.Add(this.rbOriPortrait);
             this.rbOri.Controls.Add(this.rbOriLandscape);
-            this.rbOri.Location = new System.Drawing.Point(135, 272);
+            this.rbOri.Location = new System.Drawing.Point(133, 314);
+            this.rbOri.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbOri.Name = "rbOri";
-            this.rbOri.Size = new System.Drawing.Size(429, 22);
+            this.rbOri.Size = new System.Drawing.Size(243, 25);
             this.rbOri.TabIndex = 75;
             // 
             // rbOriPortrait
             // 
             this.rbOriPortrait.AutoSize = true;
             this.rbOriPortrait.Location = new System.Drawing.Point(0, 0);
+            this.rbOriPortrait.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbOriPortrait.Name = "rbOriPortrait";
-            this.rbOriPortrait.Size = new System.Drawing.Size(73, 22);
+            this.rbOriPortrait.Size = new System.Drawing.Size(44, 22);
             this.rbOriPortrait.TabIndex = 69;
             this.rbOriPortrait.TabStop = true;
-            this.rbOriPortrait.Text = "Portrait";
+            this.rbOriPortrait.Text = "Ptr";
             this.rbOriPortrait.UseVisualStyleBackColor = true;
             // 
             // rbOriLandscape
             // 
             this.rbOriLandscape.AutoSize = true;
-            this.rbOriLandscape.Location = new System.Drawing.Point(100, 0);
+            this.rbOriLandscape.Location = new System.Drawing.Point(56, 0);
+            this.rbOriLandscape.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbOriLandscape.Name = "rbOriLandscape";
-            this.rbOriLandscape.Size = new System.Drawing.Size(90, 22);
+            this.rbOriLandscape.Size = new System.Drawing.Size(44, 22);
             this.rbOriLandscape.TabIndex = 70;
             this.rbOriLandscape.TabStop = true;
-            this.rbOriLandscape.Text = "Landscape";
+            this.rbOriLandscape.Text = "Lsc";
             this.rbOriLandscape.UseVisualStyleBackColor = true;
             // 
             // rbCat
@@ -329,48 +460,53 @@
             this.rbCat.Controls.Add(this.rbCatManga);
             this.rbCat.Controls.Add(this.rbCatCGSet);
             this.rbCat.Controls.Add(this.rbCatSelfComp);
-            this.rbCat.Location = new System.Drawing.Point(135, 92);
+            this.rbCat.Location = new System.Drawing.Point(133, 106);
+            this.rbCat.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbCat.Name = "rbCat";
-            this.rbCat.Size = new System.Drawing.Size(429, 22);
+            this.rbCat.Size = new System.Drawing.Size(243, 25);
             this.rbCat.TabIndex = 74;
             // 
             // rbCatManga
             // 
             this.rbCatManga.AutoSize = true;
             this.rbCatManga.Location = new System.Drawing.Point(0, 0);
+            this.rbCatManga.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbCatManga.Name = "rbCatManga";
-            this.rbCatManga.Size = new System.Drawing.Size(67, 22);
+            this.rbCatManga.Size = new System.Drawing.Size(47, 22);
             this.rbCatManga.TabIndex = 69;
             this.rbCatManga.TabStop = true;
-            this.rbCatManga.Text = "Manga";
+            this.rbCatManga.Text = "MG";
             this.rbCatManga.UseVisualStyleBackColor = true;
             // 
             // rbCatCGSet
             // 
             this.rbCatCGSet.AutoSize = true;
-            this.rbCatCGSet.Location = new System.Drawing.Point(100, 0);
+            this.rbCatCGSet.Location = new System.Drawing.Point(60, 0);
+            this.rbCatCGSet.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbCatCGSet.Name = "rbCatCGSet";
-            this.rbCatCGSet.Size = new System.Drawing.Size(63, 22);
+            this.rbCatCGSet.Size = new System.Drawing.Size(43, 22);
             this.rbCatCGSet.TabIndex = 70;
             this.rbCatCGSet.TabStop = true;
-            this.rbCatCGSet.Text = "CGSet";
+            this.rbCatCGSet.Text = "CG";
             this.rbCatCGSet.UseVisualStyleBackColor = true;
             // 
             // rbCatSelfComp
             // 
             this.rbCatSelfComp.AutoSize = true;
-            this.rbCatSelfComp.Location = new System.Drawing.Point(200, 0);
+            this.rbCatSelfComp.Location = new System.Drawing.Point(120, 0);
+            this.rbCatSelfComp.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbCatSelfComp.Name = "rbCatSelfComp";
-            this.rbCatSelfComp.Size = new System.Drawing.Size(86, 22);
+            this.rbCatSelfComp.Size = new System.Drawing.Size(41, 22);
             this.rbCatSelfComp.TabIndex = 71;
             this.rbCatSelfComp.TabStop = true;
-            this.rbCatSelfComp.Text = "SelfComp";
+            this.rbCatSelfComp.Text = "SC";
             this.rbCatSelfComp.UseVisualStyleBackColor = true;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(17, 273);
+            this.label9.Location = new System.Drawing.Point(16, 312);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(79, 18);
             this.label9.TabIndex = 68;
@@ -378,32 +514,39 @@
             // 
             // txtTier
             // 
-            this.txtTier.Location = new System.Drawing.Point(135, 120);
+            this.txtTier.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtTier.Location = new System.Drawing.Point(133, 138);
+            this.txtTier.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtTier.Name = "txtTier";
-            this.txtTier.Size = new System.Drawing.Size(121, 26);
+            this.txtTier.Size = new System.Drawing.Size(78, 26);
             this.txtTier.TabIndex = 67;
             // 
             // txtTags
             // 
-            this.txtTags.Location = new System.Drawing.Point(135, 180);
+            this.txtTags.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtTags.Location = new System.Drawing.Point(133, 208);
+            this.txtTags.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtTags.Name = "txtTags";
-            this.txtTags.Size = new System.Drawing.Size(429, 52);
+            this.txtTags.Size = new System.Drawing.Size(243, 59);
             this.txtTags.TabIndex = 66;
             this.txtTags.Text = "";
             // 
             // cbTags
             // 
+            this.cbTags.BackColor = System.Drawing.SystemColors.ControlLight;
             this.cbTags.FormattingEnabled = true;
-            this.cbTags.Location = new System.Drawing.Point(135, 240);
+            this.cbTags.Location = new System.Drawing.Point(280, 280);
+            this.cbTags.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbTags.Name = "cbTags";
-            this.cbTags.Size = new System.Drawing.Size(121, 26);
+            this.cbTags.Size = new System.Drawing.Size(96, 26);
             this.cbTags.TabIndex = 65;
             this.cbTags.SelectedIndexChanged += new System.EventHandler(this.CbTags_SelectedIndexChanged);
             // 
             // chkIsWipTrue
             // 
             this.chkIsWipTrue.AutoSize = true;
-            this.chkIsWipTrue.Location = new System.Drawing.Point(135, 332);
+            this.chkIsWipTrue.Location = new System.Drawing.Point(129, 380);
+            this.chkIsWipTrue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkIsWipTrue.Name = "chkIsWipTrue";
             this.chkIsWipTrue.Size = new System.Drawing.Size(54, 22);
             this.chkIsWipTrue.TabIndex = 61;
@@ -413,7 +556,8 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(17, 333);
+            this.label5.Location = new System.Drawing.Point(16, 381);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(46, 18);
             this.label5.TabIndex = 60;
@@ -425,9 +569,11 @@
             this.groupPicture.Controls.Add(this.btnNextPage);
             this.groupPicture.Controls.Add(this.btnPrevPage);
             this.groupPicture.Controls.Add(this.pctCover);
-            this.groupPicture.Location = new System.Drawing.Point(590, 30);
+            this.groupPicture.Location = new System.Drawing.Point(385, 35);
+            this.groupPicture.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupPicture.Name = "groupPicture";
-            this.groupPicture.Size = new System.Drawing.Size(765, 765);
+            this.groupPicture.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.groupPicture.Size = new System.Drawing.Size(620, 900);
             this.groupPicture.TabIndex = 59;
             this.groupPicture.TabStop = false;
             // 
@@ -436,10 +582,13 @@
             this.lbPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPage.BackColor = System.Drawing.Color.Transparent;
             this.lbPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lbPage.Location = new System.Drawing.Point(330, 735);
+            this.lbPage.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.lbPage.Location = new System.Drawing.Point(275, 880);
+            this.lbPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbPage.Name = "lbPage";
-            this.lbPage.Size = new System.Drawing.Size(105, 18);
+            this.lbPage.Size = new System.Drawing.Size(70, 21);
             this.lbPage.TabIndex = 56;
+            this.lbPage.Text = "0/0";
             this.lbPage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnNextPage
@@ -449,9 +598,10 @@
             this.btnNextPage.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btnNextPage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextPage.Location = new System.Drawing.Point(667, 711);
+            this.btnNextPage.Location = new System.Drawing.Point(778, 820);
+            this.btnNextPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnNextPage.Name = "btnNextPage";
-            this.btnNextPage.Size = new System.Drawing.Size(98, 54);
+            this.btnNextPage.Size = new System.Drawing.Size(114, 62);
             this.btnNextPage.TabIndex = 55;
             this.btnNextPage.UseVisualStyleBackColor = false;
             this.btnNextPage.Click += new System.EventHandler(this.BtnNextPage_Click);
@@ -463,49 +613,57 @@
             this.btnPrevPage.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btnPrevPage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrevPage.Location = new System.Drawing.Point(0, 711);
+            this.btnPrevPage.Location = new System.Drawing.Point(0, 820);
+            this.btnPrevPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnPrevPage.Name = "btnPrevPage";
-            this.btnPrevPage.Size = new System.Drawing.Size(98, 54);
+            this.btnPrevPage.Size = new System.Drawing.Size(114, 62);
             this.btnPrevPage.TabIndex = 54;
             this.btnPrevPage.UseVisualStyleBackColor = false;
             this.btnPrevPage.Click += new System.EventHandler(this.BtnPrevPage_Click);
             // 
             // btnNext
             // 
-            this.btnNext.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.Location = new System.Drawing.Point(434, 416);
+            this.btnNext.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnNext.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnNext.Location = new System.Drawing.Point(305, 458);
+            this.btnNext.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(130, 60);
+            this.btnNext.Size = new System.Drawing.Size(71, 69);
             this.btnNext.TabIndex = 58;
-            this.btnNext.Text = "NEXT FOLDER";
-            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Text = "NEXT";
+            this.btnNext.UseVisualStyleBackColor = false;
             this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrowse.Location = new System.Drawing.Point(274, 441);
+            this.btnBrowse.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnBrowse.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnBrowse.Location = new System.Drawing.Point(160, 495);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(150, 35);
+            this.btnBrowse.Size = new System.Drawing.Size(137, 32);
             this.btnBrowse.TabIndex = 57;
             this.btnBrowse.Text = "BROWSE";
-            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.UseVisualStyleBackColor = false;
             this.btnBrowse.Click += new System.EventHandler(this.BtnBrowse_Click);
             // 
             // txtFlags
             // 
-            this.txtFlags.Location = new System.Drawing.Point(135, 150);
+            this.txtFlags.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.txtFlags.Location = new System.Drawing.Point(133, 173);
+            this.txtFlags.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtFlags.Name = "txtFlags";
-            this.txtFlags.Size = new System.Drawing.Size(429, 26);
+            this.txtFlags.Size = new System.Drawing.Size(243, 26);
             this.txtFlags.TabIndex = 16;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1393, 834);
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ClientSize = new System.Drawing.Size(1071, 959);
             this.Controls.Add(this.groupAlbum);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FormMain";
             this.Text = "Metadata Editor";
             this.Load += new System.EventHandler(this.FormMain_Load);
@@ -563,5 +721,13 @@
         private System.Windows.Forms.RadioButton rbOriPortrait;
         private System.Windows.Forms.RadioButton rbOriLandscape;
         private System.Windows.Forms.Button btnExplore;
+        private System.Windows.Forms.Button btnPopupTags;
+        private System.Windows.Forms.Button btnPost;
+        private System.Windows.Forms.TextBox txtFileUpload;
+        private System.DirectoryServices.DirectoryEntry directoryEntry1;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnTierPlus;
+        private System.Windows.Forms.Button btnTierMin;
+        private System.Windows.Forms.Button btnPostMetadata;
     }
 }

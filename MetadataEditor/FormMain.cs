@@ -13,76 +13,145 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Drawing.Imaging;
 using MetadataEditor.AL;
 using System.Diagnostics;
+using SharedLibrary;
 
 namespace MetadataEditor
 {
     public partial class FormMain : Form
     {
-        string currentRootFolder; //for folder picker dialog, filled with the previous path of the selected folder
-        int currentFileIndex = 0; //For album display
-        IAppLogic al;
-        AlbumViewModel viewModel;
+        string _currentRootFolder; //for folder picker dialog, filled with the previous path of the selected folder
+        int _currentFileIndex = 0; //For album display
+        IAppLogic _al;
+        IAlbumInfoProvider _ai;
+
+        AlbumViewModel _viewModel;
+        AlbumDeleteStatusEnum _deleteStatus;
+        List<FileDisplayModel> _fileDisplays;
+        string _cachedFolderNext;
+        string _cachedFolderPrev;
+
+        Dictionary<string, string> _shortDisplayMap;
 
         #region Initialization
-        public FormMain(IAppLogic appLogic) {
+        public FormMain(IAppLogic appLogic, IAlbumInfoProvider ai) {
             InitializeComponent();
-            al = appLogic;
+
+            _shortDisplayMap = new Dictionary<string, string>() {
+                { "MG", "Manga" },
+                { "CG", "CGSet" },
+                { "SC", "SelfComp" },
+                { "Ptr", "Portrait" },
+                { "Lsc", "Landscape" },
+                { "EN", "English" },
+                { "JP", "Japanese" },
+                { "CH", "Chinese" },
+                { "Other", "Other" }
+            };
+
+            _al = appLogic;
+            _ai = ai;
 
             btnNextPage.Parent = pctCover;
             btnPrevPage.Parent = pctCover;
             lbPage.Parent = pctCover;
             pctCover.MouseWheel += PctCover_MouseWheel;
+            _deleteStatus = AlbumDeleteStatusEnum.NotAllowed;
         }
         
         private void FormMain_Load(object sender, EventArgs e) {
-            cbTags.DataSource = al.GetTags();
+            cbTags.DataSource = _al.GetTags();
+            txtTags.Text = "";
+            cbTags.DroppedDown = false;
+            InitializeEmptyAlbumViewModel();
             //cbCategory.DataSource = appLogic.GetCategories();
             //cbOrientation.DataSource = appLogic.GetOrientations();
+        }
+
+        private void InitializeEmptyAlbumViewModel() {
+            _viewModel = new AlbumViewModel {
+                Album = new Album()
+            };
         }
         #endregion
 
         #region Browse folder for album
         private async void BtnBrowse_Click(object sender, EventArgs e) {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = currentRootFolder;
+            dialog.InitialDirectory = _currentRootFolder;
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
                 string fullPath = dialog.FileName;
-                currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
-                viewModel = await al.GetAlbumViewModelAsync(fullPath);
+                _currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
+                _viewModel = await _al.GetAlbumViewModelAsync(fullPath, _viewModel?.Album);
+                _fileDisplays = GetFileDisplayModels(_viewModel.Path, _viewModel.AlbumFiles);
                 DisplayAlbum();
             }
         }
-        
+
+        List<FileDisplayModel> GetFileDisplayModels(string albumDir, List<string> filePaths) {
+            var result = new List<FileDisplayModel>();
+            foreach(string path in filePaths) {
+                string fileName = Path.GetFileName(path);
+                string subDir = Path.GetDirectoryName(path).Replace(albumDir, "");
+                var fileDisplay = new FileDisplayModel {
+                    Path = path,
+                    FileNameDisplay = fileName,
+                    SubDirDisplay = subDir,
+                    UploadStatus = "_"
+                };
+                result.Add(fileDisplay);
+            }
+            return result;
+        }
+
         #endregion
-        
+
         #region Display Album Infos
         void DisplayAlbum() {
             ClearControls();
 
-            txtTitle.Text = viewModel.Album.Title;
-            txtArtists.Text = String.Join(",", viewModel.Album.Artists);
-            txtTags.Text = viewModel.Album.GetAllTags();
-            txtFlags.Text = viewModel.Album.GetAllFlags();
+            txtTitle.Text = _viewModel.Album.Title;
+            txtArtists.Text = String.Join(",", _viewModel.Album.Artists);
+            txtTags.Text = _viewModel.Album.GetAllTags();
+            txtFlags.Text = _viewModel.Album.GetAllFlags();
 
-            foreach (string lan in viewModel.Album.Languages) {
+            foreach (string lan in _viewModel.Album.Languages) {
                 string controlName = "chkLan" + lan;
                 ((CheckBox)this.Controls.Find(controlName, true)[0]).Checked = true;
             }
-            SetRadioButton("rbCat", viewModel.Album.Category);
-            txtTier.Text = viewModel.Album.Tier.ToString();
-            SetRadioButton("rbOri", viewModel.Album.Orientation);
-            chkIsWipTrue.Checked = viewModel.Album.IsWip;
-            chkIsReadTrue.Checked = viewModel.Album.IsRead;
+            SetRadioButton("rbCat", _viewModel.Album.Category);
+            txtTier.Text = _viewModel.Album.Tier.ToString();
+            SetRadioButton("rbOri", _viewModel.Album.Orientation);
+            chkIsWipTrue.Checked = _viewModel.Album.IsWip;
+            chkIsReadTrue.Checked = _viewModel.Album.IsRead;
 
-            currentFileIndex = 0;
-            
-            using (Bitmap bm = new Bitmap(viewModel.AlbumFiles[currentFileIndex])) {
-                pctCover.Image = new Bitmap(bm);//copy bitmap so it wont lock the file
+            UpdateFileDisplay();
+
+            _currentFileIndex = 0;
+
+            if(_ai.SuitableVideoFormats.Contains(Path.GetExtension(_viewModel.AlbumFiles[_currentFileIndex]))) {
+                //if video show nothing
             }
-            pctCover.SizeMode = PictureBoxSizeMode.Zoom;
+            else if(_ai.SuitableImageFormats.Contains(Path.GetExtension(_viewModel.AlbumFiles[_currentFileIndex]))) {
+                using(Bitmap bm = new Bitmap(_viewModel.AlbumFiles[_currentFileIndex])) {
+                    pctCover.Image = new Bitmap(bm);//copy bitmap so it wont lock the file
+                }
+                pctCover.SizeMode = PictureBoxSizeMode.Zoom;
+            }
 
-            lbPage.Text = (currentFileIndex + 1) + "/" + viewModel.AlbumFiles.Count;
+            lbPage.Text = (_currentFileIndex + 1) + "/" + _viewModel.AlbumFiles.Count;
+
+            SetDeleteStatusAndUIAccordingly(AlbumDeleteStatusEnum.NotAllowed);
+            _cachedFolderNext = null;
+            _cachedFolderPrev = null;
+        }
+
+        void UpdateFileDisplay() {
+            string[] lines = _fileDisplays.Select(f => f.SubDirDisplay + "|" + f.FileNameDisplay + "|" + f.UploadStatus).ToArray();
+
+            txtFileUpload.Lines = lines;
+            txtFileUpload.SelectionStart = txtFileUpload.Text.Length;
+            txtFileUpload.ScrollToCaret();
         }
 
         void SetRadioButton(string v, string category) {
@@ -118,28 +187,36 @@ namespace MetadataEditor
 
         #region Save #album.json
         private async void BtnCreate_Click(object sender, EventArgs e) {
-            viewModel.Album.Title = txtTitle.Text;
-            viewModel.Album.Artists = txtArtists.Text.Split(',').ToList();
-            viewModel.Album.Category = GetFromRadioButton("rbCat");
-            viewModel.Album.Tier = int.Parse(txtTier.Text);
-            viewModel.Album.Orientation = GetFromRadioButton("rbOri");
-            viewModel.Album.Tags = txtTags.Text.Split(',').ToList();
-            viewModel.Album.Flags = txtFlags.Text.Split(',').ToList();
-            viewModel.Album.Languages = GetLansFromForm();
-            viewModel.Album.IsWip = chkIsWipTrue.Checked;
-            viewModel.Album.IsRead = chkIsReadTrue.Checked;
+            RetrieveAlbumVmValueFromUI();
+            string retval = await _al.SaveAlbumJson(_viewModel);
+        }
 
-            viewModel.Album.Artists.Sort();
-            viewModel.Album.Languages.Sort();
-            viewModel.Album.Tags.Sort();
+        private void RetrieveAlbumVmValueFromUI() {
+            _viewModel.Album.Title = txtTitle.Text;
+            _viewModel.Album.Artists = txtArtists.Text.Split(',').ToList();
+            _viewModel.Album.Category = GetFromRadioButton("rbCat");
+            _viewModel.Album.Tier = int.Parse(txtTier.Text);
+            _viewModel.Album.Orientation = GetFromRadioButton("rbOri");
+            _viewModel.Album.Tags = txtTags.Text.Split(',').ToList();
+            _viewModel.Album.Flags = txtFlags.Text.Split(',').ToList();
+            _viewModel.Album.Languages = GetLansFromForm();
+            _viewModel.Album.IsWip = chkIsWipTrue.Checked;
+            _viewModel.Album.IsRead = chkIsReadTrue.Checked;
 
-            string retval = await al.SaveAlbumJson(viewModel);
+            _viewModel.Album.Tags.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+            _viewModel.Album.Artists.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+            _viewModel.Album.Flags.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+            _viewModel.Album.Languages.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+
+            _viewModel.Album.Artists.Sort();
+            _viewModel.Album.Languages.Sort();
+            _viewModel.Album.Tags.Sort();
         }
 
         private string GetFromRadioButton(string v) {
             foreach (Control c in this.Controls[0].Controls[v].Controls) {
                 if (((RadioButton)c).Checked) {
-                    return c.Text;
+                    return _shortDisplayMap[c.Text];
                 }
             }
             return "";
@@ -151,7 +228,7 @@ namespace MetadataEditor
             foreach (Control c in this.Controls[0].Controls) {
                 if (c.Name.Contains("chkLan")) {
                     if (((CheckBox)c).Checked) {
-                        result.Add(c.Text);
+                        result.Add(_shortDisplayMap[c.Text]);
                     }
                 }
             }
@@ -161,12 +238,21 @@ namespace MetadataEditor
         #endregion
 
         #region Next/Prev
+        string GetRelativeFolder(string currentFolder, int step) {
+            string rootFolder = Path.GetDirectoryName(currentFolder);
+            string[] allFolders = Directory.GetDirectories(rootFolder);
+
+            int relativeFolderIndex = (Array.IndexOf(allFolders,currentFolder) + step) % allFolders.Length;
+            string result = allFolders[relativeFolderIndex];
+            return result;
+        }
+
         private async void BtnNext_Click(object sender, EventArgs e) {
-            List<string> allFolders = Directory.GetDirectories(currentRootFolder).ToList();
             try {
-                string fullPath = allFolders[allFolders.IndexOf(viewModel.Path) + 1];
-                currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
-                viewModel = await al.GetAlbumViewModelAsync(fullPath);
+                string fullPath = string.IsNullOrEmpty(_cachedFolderNext) ? GetRelativeFolder(_viewModel.Path, 1) : _cachedFolderNext;
+                _currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
+                _viewModel = await _al.GetAlbumViewModelAsync(fullPath, _viewModel?.Album);
+                _fileDisplays = GetFileDisplayModels(_viewModel.Path, _viewModel.AlbumFiles);
                 DisplayAlbum();
             }
             catch(Exception ex) {
@@ -174,11 +260,11 @@ namespace MetadataEditor
         }
 
         private async void BtnPrev_Click(object sender, EventArgs e) {
-            List<string> allFolders = Directory.GetDirectories(currentRootFolder).ToList();
             try {
-                string fullPath = allFolders[allFolders.IndexOf(viewModel.Path) - 1];
-                currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
-                viewModel = await al.GetAlbumViewModelAsync(fullPath);
+                string fullPath = string.IsNullOrEmpty(_cachedFolderPrev) ? GetRelativeFolder(_viewModel.Path, -1) : _cachedFolderPrev;
+                _currentRootFolder = fullPath.Replace(fullPath.Split('\\').Last(), "");
+                _viewModel = await _al.GetAlbumViewModelAsync(fullPath, _viewModel?.Album);
+                _fileDisplays = GetFileDisplayModels(_viewModel.Path, _viewModel.AlbumFiles);
                 DisplayAlbum();
             }
             catch (Exception ex) {
@@ -208,26 +294,34 @@ namespace MetadataEditor
 
         void NextPage() {
             try {
-                pctCover.Image = new Bitmap(viewModel.AlbumFiles[++currentFileIndex]);
-                lbPage.Text = (currentFileIndex + 1) + "/" + viewModel.AlbumFiles.Count;
+                using(var bm = new Bitmap(_viewModel.AlbumFiles[++_currentFileIndex])) {
+                    pctCover.Image = new Bitmap(bm);
+                }
+                lbPage.Text = (_currentFileIndex + 1) + "/" + _viewModel.AlbumFiles.Count;
             }
             catch (ArgumentOutOfRangeException) {
-                currentFileIndex = 0;
-                pctCover.Image = new Bitmap(viewModel.AlbumFiles[currentFileIndex]);
-                lbPage.Text = (currentFileIndex + 1) + "/" + viewModel.AlbumFiles.Count;
+                _currentFileIndex = 0;
+                using(var bm = new Bitmap(_viewModel.AlbumFiles[_currentFileIndex])) {
+                    pctCover.Image = new Bitmap(bm);
+                }
+                lbPage.Text = (_currentFileIndex + 1) + "/" + _viewModel.AlbumFiles.Count;
             }
             catch (NullReferenceException) { }
         }
 
         void PrevPage() {
             try {
-                pctCover.Image = new Bitmap(viewModel.AlbumFiles[--currentFileIndex]);
-                lbPage.Text = (currentFileIndex + 1) + "/" + viewModel.AlbumFiles.Count;
+                using(var bm = new Bitmap(_viewModel.AlbumFiles[--_currentFileIndex])) {
+                    pctCover.Image = new Bitmap(bm);
+                }
+                lbPage.Text = (_currentFileIndex + 1) + "/" + _viewModel.AlbumFiles.Count;
             }
             catch (ArgumentOutOfRangeException) {
-                currentFileIndex = viewModel.AlbumFiles.Count - 1;
-                pctCover.Image = new Bitmap(viewModel.AlbumFiles[currentFileIndex]);
-                lbPage.Text = (currentFileIndex + 1) + "/" + viewModel.AlbumFiles.Count;
+                _currentFileIndex = _viewModel.AlbumFiles.Count - 1;
+                using(var bm = new Bitmap(_viewModel.AlbumFiles[_currentFileIndex])) {
+                    pctCover.Image = new Bitmap(bm);
+                }
+                lbPage.Text = (_currentFileIndex + 1) + "/" + _viewModel.AlbumFiles.Count;
             }
             catch (NullReferenceException) { }
         }
@@ -235,22 +329,61 @@ namespace MetadataEditor
         #endregion
 
         #region Other UI Actions
-        private void CbTags_SelectedIndexChanged(object sender, EventArgs e) {
+
+        private void btnTierMin_Click(object sender, EventArgs e) {
+            int res;
+            int val = int.TryParse(txtTier.Text, out res) ? res : 0;
+            txtTier.Text = (val - 1).ToString();
+        }
+
+        private void btnTierPlus_Click(object sender, EventArgs e) {
+            int res;
+            int val = int.TryParse(txtTier.Text, out res) ? res : 0;
+            txtTier.Text = (val + 1).ToString();
+            chkIsReadTrue.Checked = true;
+        }
+
+        public List<string> ChangeSelectedTags(string tag) {
             txtTags.Text = txtTags.Text.Trim();
-            List<string> tags = txtTags.Text.Split(',').ToList();
+            List<string> tags = txtTags.Text.Split(new[] { "," }, StringSplitOptions.None).ToList();
             tags.Remove("");
-            if (tags.Contains(cbTags.SelectedItem)){ //Remove if exist
-                tags.Remove(cbTags.SelectedItem.ToString());
+            if(tags.Contains(tag)) { //Remove if exist
+                tags.Remove(tag);
             }
             else { //Add if not exist
-                tags.Add(cbTags.SelectedItem.ToString());
+                tags.Add(tag);
             }
+            tags.Sort();
             txtTags.Text = string.Join(",", tags);
+
+            return tags;
+        }
+
+        private void CbTags_SelectedIndexChanged(object sender, EventArgs e) {
+            cbTags.DroppedDown = true;
+
+            ChangeSelectedTags(cbTags.SelectedItem.ToString());
+        }
+
+        private void btnPopupTags_Click(object sender, EventArgs e) {
+            FormTags formTags = new FormTags(this, _al.GetTags().ToList(), _viewModel.Album.Tags);
+            formTags.StartPosition = FormStartPosition.Manual;
+            formTags.ShowInTaskbar = false;
+            formTags.ShowIcon = false;
+            formTags.ControlBox = false;
+            formTags.Text = String.Empty;
+
+            var location = this.Location;
+            var marginLeft = btnPopupTags.Left + btnPopupTags.Width;
+            var marginTop = btnPopupTags.Top + btnPopupTags.Height;
+            location.Offset(marginLeft, marginTop);
+            formTags.Location = location;
+            formTags.Show(btnPopupTags);
         }
 
         private void btnExplore_Click(object sender, EventArgs e) {
             try {
-                string fileName = viewModel.Path;
+                string fileName = _viewModel.Path;
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = "explorer.exe";
                 startInfo.Arguments = "\"" + fileName + "\"";
@@ -259,6 +392,68 @@ namespace MetadataEditor
             catch(Exception ex) {
             }
         }
+
+        private async void btnPost_Click(object sender, EventArgs e) {
+            RetrieveAlbumVmValueFromUI();
+
+            var saveTask = _al.SaveAlbumJson(_viewModel);
+
+            var progress = new Progress<FileDisplayModel>(model => {
+                var uploadedFIle = _fileDisplays.FirstOrDefault(fd => fd.Path == model.Path);
+                uploadedFIle.UploadStatus = model.UploadStatus;
+
+                //txtFileUpload.AppendText($"{uploadedFIle.SubDirDisplay}|{uploadedFIle.FileNameDisplay}|{uploadedFIle.UploadStatus}");
+                UpdateFileDisplay();
+            });
+
+            var albumId = await _al.PostAlbumJson(_viewModel, progress);
+            var saveTaskRetval = await saveTask;
+
+            SetDeleteStatusAndUIAccordingly(AlbumDeleteStatusEnum.Allowed);
+            //var confirmResult = MessageBox.Show("Success", albumId, MessageBoxButtons.OK);
+        }
+
+
+        private async void btnPostMetadata_Click(object sender, EventArgs e) {
+            RetrieveAlbumVmValueFromUI();
+            var albumId = await _al.PostAlbumMetadata(_viewModel);
+            var confirmResult = MessageBox.Show(albumId, "Success", MessageBoxButtons.OK);
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e) {
+            try {
+                _cachedFolderNext = GetRelativeFolder(_viewModel.Path, 1);
+                _cachedFolderPrev = GetRelativeFolder(_viewModel.Path, -1);
+
+                Directory.Delete(_viewModel.Path, true);
+
+                SetDeleteStatusAndUIAccordingly(AlbumDeleteStatusEnum.Deleted);
+            }
+            catch(Exception ex) {
+                var confirmResult = MessageBox.Show(ex.Message,"Exception", MessageBoxButtons.OK);
+            }
+        }
+
+        private void SetDeleteStatusAndUIAccordingly(AlbumDeleteStatusEnum deleteStatus) {
+            _deleteStatus = deleteStatus;
+            bool enableUIGroup = true;
+
+            if(deleteStatus == AlbumDeleteStatusEnum.NotAllowed) {
+                enableUIGroup = true;
+                btnDelete.Enabled = false;
+            }
+            else if(deleteStatus == AlbumDeleteStatusEnum.Allowed) {
+                enableUIGroup = true;
+                btnDelete.Enabled = true;
+            }
+            else if(deleteStatus == AlbumDeleteStatusEnum.Deleted) {
+                enableUIGroup = false;
+            }
+
+            btnPost.Enabled = enableUIGroup;
+            btnCreate.Enabled = enableUIGroup;
+        }
+
         #endregion
     }
 }
