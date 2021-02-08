@@ -14,7 +14,7 @@
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "antd": "^3.26.12",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "country-flag-icons": "^1.2.3",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
