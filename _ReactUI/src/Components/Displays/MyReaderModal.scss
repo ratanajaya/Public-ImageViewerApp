@@ -1,0 +1,21 @@
+.ant-modal-content{
+  background-color: transparent;
+}
+
+.ant-modal-body{
+  padding: 0px 15px 15px 15px;
+  background-color: rgb(0, 21, 41);
+  border-radius: 8px;
+}
+
+.ant-rate{
+  width: 85%;
+}
+
+.ant-rate-star{
+  width: 33%;
+}
+
+.ant-rate-star:not(:last-child){
+  margin-right: 0px;
+}

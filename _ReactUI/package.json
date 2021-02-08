@@ -1,0 +1,53 @@
+{
+  "name": "cloudui",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://ratanajaya.github.io",
+  "homepageIIS": "./",
+  "homepageGHPages": "https://ratanajaya.github.io/portfolio",
+  "homepageCordova": "../www",
+  "dependencies": {
+    "@ant-design/icons": "^4.0.2",
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.1",
+    "@testing-library/user-event": "^7.2.1",
+    "antd": "^3.26.12",
+    "axios": "^0.20.0",
+    "country-flag-icons": "^1.2.3",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.15",
+    "node-sass": "^4.14.1",
+    "query-string": "^6.13.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-intersection-observer": "^8.29.0",
+    "react-responsive": "^8.0.3",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "react-swipeable": "^6.0.1",
+    "swr": "^0.3.8"
+  },
+  "scripts": {
+    "start": "react-scripts start --host 0.0.0.0",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
