@@ -18,7 +18,7 @@
     "country-flag-icons": "^1.2.3",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "query-string": "^6.13.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
